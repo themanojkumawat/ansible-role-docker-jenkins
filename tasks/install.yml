@@ -1,0 +1,39 @@
+---
+
+- name: copy service definition for Jenkins
+  template:
+    src: jenkins.service
+    dest: "/etc/systemd/system/jenkins.service"
+    mode: 0644
+    owner: root
+    group: root
+
+- name: copy executable for Jenkins
+  template:
+    src: jenkins
+    dest: "/usr/local/bin/jenkins"
+    mode: 0755
+    owner: root
+    group: root
+
+- name: start jenkins
+  service:
+    name: jenkins
+    state: started
+    enabled: true
+
+- name: sleep
+  pause:
+    seconds: 10
+
+
+
+- name: restart jenkins
+  service:
+    name: jenkins
+    state: restarted
+
+- name: Ensure Java is installed.
+  apt:
+    name: "{{ java_packages }}"
+    state: present
